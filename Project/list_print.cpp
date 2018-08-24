@@ -5,7 +5,8 @@ using namespace std;
 
 struct dirent ** namelist;
 
-int list_print(string path,int cur_pos){
+int list_print(string pre_path,string path,int cur_pos){
+	// cout<<cur_pos<<" ";
 	int i = 0;
 	if(!cur_pos){
 		int itemCounter = 0,i=0;
@@ -24,7 +25,7 @@ int list_print(string path,int cur_pos){
 	while(1){
 		if((int)namelist[cur_pos-1]->d_type == 4){
 			string s = namelist[cur_pos-1]->d_name;
-			cout<<s<<" ";
+			// cout<<s<<" ";
 			if(s == ".") break;
 			if(s == ".."){
 				int pos = path.size()-1;
@@ -40,12 +41,13 @@ int list_print(string path,int cur_pos){
 		}
 		else break;
 	}
-	cout<<new_path<<" ";
+	// cout<<new_path<<" ";
 	int n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
 	while(i < n){
-		cout<<" "<<namelist[i]->d_name<<"\n";
+		cout<<i<<" "<<namelist[i]->d_name<<"\n";
 		i++;
 		itemCounter++;
 	}
-	pointer_move(path,itemCounter);
+	screen_point(itemCounter,0,0);
+	pointer_move(pre_path,path,itemCounter);
 }
