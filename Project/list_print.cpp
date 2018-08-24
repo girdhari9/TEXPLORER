@@ -5,17 +5,13 @@ using namespace std;
 
 struct dirent ** namelist;
 
-string path = "/home/gunno/Documents/os";
-
-
-int list_print(int cur_pos){
-	// cout<<cur_pos<<" ";
+int list_print(string path,int cur_pos){
 	int i = 0;
 	if(!cur_pos){
 		int itemCounter = 0,i=0;
 	    int n = scandir(path.c_str(),&namelist,NULL, alphasort);
 	    while(i<n){
-		    cout<<i<<" "<<namelist[i]->d_name<<"\n";
+		    cout<<" "<<namelist[i]->d_name<<"\n";
 		    i++;
 		    itemCounter++;
 	    }
@@ -23,13 +19,24 @@ int list_print(int cur_pos){
 	}
 	screen_point(0,0,1);
 	int itemCounter = 0;
-	string new_path;
+	string new_path = path;
 	// cout<<namelist[cur_pos-1]->d_name;
 	while(1){
 		if((int)namelist[cur_pos-1]->d_type == 4){
 			string s = namelist[cur_pos-1]->d_name;
-			new_path = path + '/' + s;
-			break;
+			cout<<s<<" ";
+			if(s == ".") break;
+			if(s == ".."){
+				int pos = path.size()-1;
+				while(s[pos] != '/') pos--;
+				path[pos] = '\0';
+				new_path = path;
+				break;
+			}
+			else{
+				new_path = path + '/' + s;
+				break;
+			}
 		}
 		else break;
 	}
@@ -40,5 +47,5 @@ int list_print(int cur_pos){
 		i++;
 		itemCounter++;
 	}
-	pointer_move(itemCounter);
+	pointer_move(path,itemCounter);
 }

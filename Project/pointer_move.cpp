@@ -5,7 +5,7 @@ using namespace std;
 #define gotoxy(x,y) cout<<"\033["<<x<<";"<<y<<"H"
 
 
-int pointer_move(int cur_pos){
+int pointer_move(string path,int cur_pos){
 	struct termios initialrsettings, newrsettings;
     tcgetattr(0, &initialrsettings);
     
@@ -22,7 +22,7 @@ int pointer_move(int cur_pos){
     		    case 'B': if(x <= cur_pos) screen_point(++x,y,0); break;
     		    // case 'C': if(y < 144) screen_point(x,++y,0); break;
     		    // case 'D': if(y) screen_point(x,--y,0); break;
-                case 10: list_print(x);
+                case 10: list_print(path,x);
     		    default: break;
     	    }
     }
