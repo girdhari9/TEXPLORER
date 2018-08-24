@@ -19,10 +19,12 @@ int pointer_move(string pre_path,string path, int cur_pos){
     while(c != 101){
     		switch(c = getchar()){
     		    case 'A': if(x) screen_point(--x,y,0); break;
-    		    case 'B': if(x < cur_pos) screen_point(++x,y,0); break;
+    		    case 'B': if(x < cur_pos) screen_point(++x,y,0); 
+                          else x = 1; screen_point(x,y,0); break;
     		    case 'C': list_print(pre_path,path,x); break;
     		    case 'D': list_print(pre_path,path,x); break;
-                case 10: list_print(pre_path,path,x);
+                case 10: list_print(pre_path,path,x); break;
+                case 8: list_print(pre_path,path,x); break;
     		    default: break;
     	    }
     }

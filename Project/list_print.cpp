@@ -5,49 +5,65 @@ using namespace std;
 
 struct dirent ** namelist;
 
-int list_print(string pre_path,string path,int cur_pos){
-	// cout<<cur_pos<<" ";
+void list_print(string pre_path,string path,int cur_pos){
+	string new_path = path;
 	int i = 0;
-	if(!cur_pos){
+	if(cur_pos < 2){
+		screen_point(0,0,1);
+		cout<<path<<" ";
 		int itemCounter = 0,i=0;
 	    int n = scandir(path.c_str(),&namelist,NULL, alphasort);
 	    while(i<n){
-		    cout<<" "<<namelist[i]->d_name<<"\n";
-		    i++;
+	    	if(namelist[i]->d_type == 4)
+	    		cout << "\033[1;31m "<<namelist[i]->d_name<<"\033[0m\n";
+	    	else
+		    	cout<<" "<<namelist[i]->d_name<<"\n";
+		    i++;	
 		    itemCounter++;
+		    // free(namelist[i]);
 	    }
-	    return itemCounter;
+	    // free(namelist);
+	    screen_point(itemCounter,0,0);
+	    pointer_move(pre_path,new_path,itemCounter);
 	}
 	screen_point(0,0,1);
-	int itemCounter = 0;
-	string new_path = path;
+	int itemCounter = 0, flag = 1;
 	// cout<<namelist[cur_pos-1]->d_name;
 	while(1){
 		if((int)namelist[cur_pos-1]->d_type == 4){
 			string s = namelist[cur_pos-1]->d_name;
-			// cout<<s<<" ";
-			if(s == ".") break;
-			if(s == ".."){
-				int pos = path.size()-1;
-				while(s[pos] != '/') pos--;
-				path[pos] = '\0';
-				new_path = path;
-				break;
+			if(s == ".") {
+				flag = 0; break;
 			}
-			else{
+			if(s == ".."){
+				// flag = 0;
+				int pos = new_path.size()-1;
+				while(s[pos] != '/') pos--;
+				new_path[pos] = NULL;
+				cout<<new_path<<" ";
+				// break;
+			}
+			// else{
 				new_path = path + '/' + s;
 				break;
-			}
+			// }
 		}
 		else break;
 	}
-	// cout<<new_path<<" ";
-	int n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
-	while(i < n){
-		cout<<i<<" "<<namelist[i]->d_name<<"\n";
-		i++;
-		itemCounter++;
-	}
-	screen_point(itemCounter,0,0);
-	pointer_move(pre_path,path,itemCounter);
+	if(flag){
+		int n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
+		while(i<n){
+	    	if(namelist[i]->d_type == 4)
+	    		cout << "\033[1;31m "<<namelist[i]->d_name<<"\033[0m\n";
+	    	else
+		    	cout<<" "<<namelist[i]->d_name<<"\n";
+		    i++;	
+		    itemCounter++;
+		    // free(namelist[i]);
+	    }
+		// free(namelist);
+		screen_point(itemCounter,0,0);
+		pointer_move(pre_path,new_path,itemCounter);
+	}	
+	
 }
