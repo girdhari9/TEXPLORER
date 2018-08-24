@@ -1,5 +1,6 @@
 #include "screenPoint.h"
 #include<dirent.h>
+#include <termios.h>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ void list_print(string pre_path,string path,int cur_pos){
 	int i = 0;
 	if(cur_pos < 2){
 		screen_point(0,0,1);
-		cout<<path<<" ";
+		// cout<<path<<" ";
 		int itemCounter = 0,i=0;
 	    int n = scandir(path.c_str(),&namelist,NULL, alphasort);
 	    while(i<n){
@@ -32,23 +33,22 @@ void list_print(string pre_path,string path,int cur_pos){
 	while(1){
 		if((int)namelist[cur_pos-1]->d_type == 4){
 			string s = namelist[cur_pos-1]->d_name;
-			if(s == ".") {
-				flag = 0; break;
-			}
-			if(s == ".."){
-				// flag = 0;
-				int pos = new_path.size()-1;
-				while(s[pos] != '/') pos--;
-				new_path[pos] = NULL;
-				cout<<new_path<<" ";
-				// break;
-			}
-			// else{
-				new_path = path + '/' + s;
-				break;
+			// if(s == ".") {
+			// 	flag = 0; break;
 			// }
+			// if(s == ".."){
+			// 	int pos = new_path.size()-1;
+			// 	while(s[pos] != '/') pos--;
+			// 	new_path[pos] = NULL;
+			// }
+			new_path = path + '/' + s;
+			break;
 		}
-		else break;
+		else{
+			string opn_file = "xdg-open "+new_path + "/" + namelist[cur_pos-1]->d_name;
+			system(opn_file.c_str());
+			break;
+		}
 	}
 	if(flag){
 		int n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
@@ -63,7 +63,6 @@ void list_print(string pre_path,string path,int cur_pos){
 	    }
 		// free(namelist);
 		screen_point(itemCounter,0,0);
-		pointer_move(pre_path,new_path,itemCounter);
 	}	
-	
+	pointer_move(pre_path,new_path,itemCounter);
 }
