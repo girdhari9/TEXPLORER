@@ -5,7 +5,9 @@ using namespace std;
 
 #define gotoxy(x,y) cout<<"\033["<<x<<";"<<y<<"H"
 string home_path = "/home/gunno/Documents/os";
-extern int up,n;
+extern int up,n,x,y;
+
+int c = 0;
 
 int pointer_move(stack<string> &forword_st,stack<string> &back_st,string path, int cur_pos){
 	struct termios initialrsettings, newrsettings;
@@ -17,7 +19,6 @@ int pointer_move(stack<string> &forword_st,stack<string> &back_st,string path, i
     // newrsettings.c_lflag &= ~ISIG;
     tcsetattr(0, TCSANOW, &newrsettings);
 
-    int c = 0, x = cur_pos, y = 0;
     string path1;
 
     while(c != 101){
@@ -30,14 +31,14 @@ int pointer_move(stack<string> &forword_st,stack<string> &back_st,string path, i
                           else if(up+5 < n){
                                 up++; list_print(path,1,2);
                           } break;
-    		    case 'C':{ up = 0;
+    		    case 'C':{ up = 0, x = 1;
                         if(!forword_st.empty()){
                             path1 = forword_st.top();
                             back_st.push(path1);
                             forword_st.pop(); list_print(path1,1,0); break;
                         }
                     } 
-    		    case 'D':{ up = 0;
+    		    case 'D':{ up = 0, x = 1;
                         if(!back_st.empty()){
                             path1 = back_st.top(); forword_st.push(path1);
                             back_st.pop(); list_print(path1,1,0); break;
@@ -47,13 +48,14 @@ int pointer_move(stack<string> &forword_st,stack<string> &back_st,string path, i
                     back_st.push(path);
                     list_print(path,x,0); break;  
                 } 
-                case 127: up = 0;
+                case 127: up = 0, x = 1;
                         if(!back_st.empty()){
                             path1 = back_st.top();
                             forword_st.push(path1);
                             back_st.pop(); list_print(path1,1,0); break;
                         }
-                case 104: up = 0;list_print(home_path,1,0); break;
+                case 104: up = 0, x = 1;
+                        list_print(home_path,1,0); break;
                 case 58: cmd_main();
     		    default: break;
     	    }

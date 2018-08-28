@@ -7,16 +7,15 @@ stack<string> back_st;
 stack<string> forword_st;
 int itemCounter;
 
-int up = 0,n;
+int up = 0,n,x = 1, y = 0;
 
 void list_print(string path,int cur_pos, int update_value){
 	string new_path = path;
-	int i = 0;
 	if(cur_pos < 2){
 		screen_point(0,0,1);
-		itemCounter = 0; int i=0;
+		itemCounter = 0;
 	    n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
-	    for(i = up; i < up+5 && i < n; i++){
+	    for(int i = up; i < up+5 && i < n; i++){
 	    	if(namelist[i]->d_type == 4)
 	    		cout << "\033[1;31m "<<namelist[i]->d_name<<"\033[0m";
 	    	else
@@ -26,8 +25,9 @@ void list_print(string path,int cur_pos, int update_value){
 	        print_file_permission(temp_path);
 		    itemCounter++;
 	    }
-	    if(update_value == 1) screen_point(1,0,0);
-	    else screen_point(itemCounter,0,0);
+	    if(update_value == 2)
+	    	screen_point(itemCounter,0,0);
+	    else screen_point(0,0,0);
 	    pointer_move(forword_st,back_st,new_path,itemCounter);
 	}
 	screen_point(0,0,1);
@@ -50,8 +50,8 @@ void list_print(string path,int cur_pos, int update_value){
 	}
 	forword_st.push(new_path);
 	n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
-	up = 0;
-	for(i = up; i < up+5 && i < n; i++){
+	up = 0, x = 1;
+	for(int i = up; i < up+5 && i < n; i++){
 	    if(namelist[i]->d_type == 4)
 	    	cout << "\033[1;31m "<<namelist[i]->d_name<<"\033[0m";
 	    else
@@ -61,7 +61,7 @@ void list_print(string path,int cur_pos, int update_value){
 	    print_file_permission(temp_path);
 		itemCounter++;
 	} 
-	screen_point(itemCounter,0,0);
+	screen_point(0,0,0);
 	pointer_move(forword_st,back_st,new_path,itemCounter);
 }
 
