@@ -7,7 +7,7 @@ stack<string> back_st;
 stack<string> forword_st;
 int itemCounter;
 
-int up = 0,n,x = 1, y = 0;
+int up = 0,n,x = 1, y = 0, screen_limit = 15;
 
 void list_print(string path,int cur_pos, int update_value){
 	string new_path = path;
@@ -15,7 +15,7 @@ void list_print(string path,int cur_pos, int update_value){
 		screen_point(0,0,1);
 		itemCounter = 0;
 	    n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
-	    for(int i = up; i < up+5 && i < n; i++){
+	    for(int i = up; i < up + screen_limit && i < n; i++){
 	    	if(namelist[i]->d_type == 4)
 	    		cout << "\033[1;31m "<<namelist[i]->d_name<<"\033[0m";
 	    	else
@@ -30,6 +30,9 @@ void list_print(string path,int cur_pos, int update_value){
 	    else screen_point(0,0,0);
 	    pointer_move(forword_st,back_st,new_path,itemCounter);
 	}
+	/* After pressing "Enter" this code will run to traverse in new directroy 
+	and Display all files of that directory */
+
 	screen_point(0,0,1);
 	itemCounter = 0;
 	int index = up + cur_pos-1; 
@@ -51,7 +54,7 @@ void list_print(string path,int cur_pos, int update_value){
 	forword_st.push(new_path);
 	n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
 	up = 0, x = 1;
-	for(int i = up; i < up+5 && i < n; i++){
+	for(int i = up; i < up + screen_limit && i < n; i++){
 	    if(namelist[i]->d_type == 4)
 	    	cout << "\033[1;31m "<<namelist[i]->d_name<<"\033[0m";
 	    else

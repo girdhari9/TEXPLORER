@@ -9,7 +9,7 @@
 #include<grp.h>
 #include <stdlib.h>
 #include<getopt.h>
-
+#include<fcntl.h>
 
 using namespace std;
 
