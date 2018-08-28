@@ -31,10 +31,11 @@ void list_print(string path,int cur_pos, int update_value){
 	    pointer_move(forword_st,back_st,new_path,itemCounter);
 	}
 	screen_point(0,0,1);
-	itemCounter = 0; 
+	itemCounter = 0;
+	int index = up + cur_pos-1; 
 	while(1){
-		if((int)namelist[cur_pos-1]->d_type == 4){
-			string s = namelist[cur_pos-1]->d_name;
+		if((int)namelist[index]->d_type == 4){
+			string s = namelist[index]->d_name;
 			if(s == ".." && forword_st.empty())
 				new_path = path;
 			else if(s == ".") new_path = path;
@@ -42,25 +43,25 @@ void list_print(string path,int cur_pos, int update_value){
 			break;
 		}
 		else{
-			string opn_file = "xdg-open "+new_path + "/" + namelist[cur_pos-1]->d_name;
+			string opn_file = "xdg-open "+new_path + "/" + namelist[index]->d_name;
 			system(opn_file.c_str());
 			break;
 		}
 	}
-		forword_st.push(new_path);
-		int n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
-		while(i<n){
-	    	if(namelist[i]->d_type == 4)
-	    		cout << "\033[1;31m "<<namelist[i]->d_name<<"\033[0m";
-	    	else
-		    	cout<<" "<<namelist[i]->d_name;
-		    string temp_path = new_path + "/" + namelist[i]->d_name;
-		    screen_point(itemCounter+1,40,0);
-	        print_file_permission(temp_path);
-		    i++;	
-		    itemCounter++;
-	    }
-	    screen_point(itemCounter,0,0);
+	forword_st.push(new_path);
+	n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
+	up = 0;
+	for(i = up; i < up+5 && i < n; i++){
+	    if(namelist[i]->d_type == 4)
+	    	cout << "\033[1;31m "<<namelist[i]->d_name<<"\033[0m";
+	    else
+		    cout<<" "<<namelist[i]->d_name;
+		string temp_path = new_path + "/" + namelist[i]->d_name;
+		screen_point(itemCounter+1,40,0);
+	    print_file_permission(temp_path);
+		itemCounter++;
+	} 
+	screen_point(itemCounter,0,0);
 	pointer_move(forword_st,back_st,new_path,itemCounter);
 }
 

@@ -30,29 +30,30 @@ int pointer_move(stack<string> &forword_st,stack<string> &back_st,string path, i
                           else if(up+5 < n){
                                 up++; list_print(path,1,2);
                           } break;
-    		    case 'C':
+    		    case 'C':{ up = 0;
                         if(!forword_st.empty()){
                             path1 = forword_st.top();
                             back_st.push(path1);
                             forword_st.pop(); list_print(path1,1,0); break;
                         }
-    		    case 'D':{ 
+                    } 
+    		    case 'D':{ up = 0;
                         if(!back_st.empty()){
                             path1 = back_st.top(); forword_st.push(path1);
                             back_st.pop(); list_print(path1,1,0); break;
                         }
                     }
-                case 10:{
+                case 10:{ 
                     back_st.push(path);
                     list_print(path,x,0); break;  
                 } 
-                case 127:
+                case 127: up = 0;
                         if(!back_st.empty()){
                             path1 = back_st.top();
                             forword_st.push(path1);
                             back_st.pop(); list_print(path1,1,0); break;
                         }
-                case 104: list_print(home_path,1,0); break;
+                case 104: up = 0;list_print(home_path,1,0); break;
                 case 58: cmd_main();
     		    default: break;
     	    }
