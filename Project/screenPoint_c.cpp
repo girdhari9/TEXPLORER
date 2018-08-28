@@ -1,8 +1,5 @@
 #include "screenPoint.h"
 
-
-#define gotoxy(x,y) cout<<"\033["<<x<<";"<<y<<"H"
-
 using namespace std;
 
 void screen_point(int x, int y, int flag){

@@ -1,12 +1,4 @@
 #include "screenPoint.h"
-#include<dirent.h>
-#include <termios.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include<pwd.h>
-#include<grp.h>
 
 using namespace std;
 
@@ -15,14 +7,16 @@ stack<string> back_st;
 stack<string> forword_st;
 int itemCounter;
 
-void list_print(string path,int cur_pos){
+int up = 0,n;
+
+void list_print(string path,int cur_pos, int update_value){
 	string new_path = path;
 	int i = 0;
 	if(cur_pos < 2){
 		screen_point(0,0,1);
 		itemCounter = 0; int i=0;
-	    int n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
-	    while(i<n){
+	    n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
+	    for(i = up; i < up+5 && i < n; i++){
 	    	if(namelist[i]->d_type == 4)
 	    		cout << "\033[1;31m "<<namelist[i]->d_name<<"\033[0m";
 	    	else
@@ -30,10 +24,10 @@ void list_print(string path,int cur_pos){
 		    string temp_path = new_path + "/" + namelist[i]->d_name;
 		    screen_point(itemCounter+1,40,0);
 	        print_file_permission(temp_path);
-		    i++;	
 		    itemCounter++;
 	    }
-	    screen_point(itemCounter,0,0);
+	    if(update_value == 1) screen_point(1,0,0);
+	    else screen_point(itemCounter,0,0);
 	    pointer_move(forword_st,back_st,new_path,itemCounter);
 	}
 	screen_point(0,0,1);
@@ -41,7 +35,10 @@ void list_print(string path,int cur_pos){
 	while(1){
 		if((int)namelist[cur_pos-1]->d_type == 4){
 			string s = namelist[cur_pos-1]->d_name;
-			new_path = path + '/' + s;
+			if(s == ".." && forword_st.empty())
+				new_path = path;
+			else if(s == ".") new_path = path;
+			else new_path = path + '/' + s;	
 			break;
 		}
 		else{
