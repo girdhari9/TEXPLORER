@@ -1,5 +1,5 @@
 #include<bits/stdc++.h>
-#include "screenPoint.h"
+#include "normal_mode.h"
 
 using namespace std;
 

@@ -15,5 +15,12 @@ using namespace std;
 
 #define gotoxy(x,y) cout<<"\033["<<x<<";"<<y<<"H"
 
+void cmd_main(string s);
 void copy_file(string s, string t);
-void cmd_main();
+void move_file(string s, string t);
+void delete_dir(string t);
+void search_file(string s, string t,int a);
+void search_dir(string t,string s,string file);
+void snapshot(string path,string file,string folder);
+void tokenized(string s);
+void copy_dir(string s, string t);

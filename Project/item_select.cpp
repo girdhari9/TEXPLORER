@@ -1,4 +1,4 @@
-#include "screenPoint.h"
+#include "normal_mode.h"
 #include <termios.h>
 using namespace std;
 
