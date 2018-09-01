@@ -25,3 +25,4 @@ void snapshot(string path,string file,string folder);
 void tokenized(string s);
 void copy_dir(string s, string t);
 void print_search_file(vector<string> &v,string);
+void cmd_arr_decl();
