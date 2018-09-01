@@ -13,14 +13,12 @@ using namespace std;
 
 #define gotoxy(x,y) cout<<"\033["<<x<<";"<<y<<"H"
 
-
 void screen_point(int x, int y, int flag);
 void list_print(string path,int cur_pos,int update_value);
-int pointer_move(stack<string> &forword_st,stack<string> &back_st,string path,int cur_pos);
+int pointer_move();
 int item_select(int x,int cur_pos, string path);
 void print_file_permission(string path);
 void clear_scr(int start);
 string trim_name(string name,int size,int flag);
 void init_setting();
 void re_init_setting();
-

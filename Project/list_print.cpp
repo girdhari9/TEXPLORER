@@ -6,11 +6,12 @@ struct dirent ** namelist;
 stack<string> back_st;
 stack<string> forword_st;
 int itemCounter;
+string new_path;
 extern int cmd_mod_screen_start;
 int up = 0,n,x = 1, y = 1, screen_limit = 13;
 
 void list_print(string path,int cur_pos, int update_value){
-	string new_path = path;
+	new_path = path;
 	if(cur_pos < 2){
 		screen_point(0,0,1);
 		itemCounter = 0;
@@ -32,23 +33,24 @@ void list_print(string path,int cur_pos, int update_value){
 	    	screen_point(itemCounter,0,0);
 	    // if(update_value == 4) return;
 	    else screen_point(0,0,0);
-	    pointer_move(forword_st,back_st,new_path,itemCounter);
+	    return;
 	}
 	/* After pressing "Enter" this code will run to traverse in new directroy 
 	and Display all files of that directory */
 
 	screen_point(0,0,1);
+	// cout<<path.substr(18);
 	itemCounter = 0;
 	int index = up + cur_pos-1, flag = 1; 
 	while(1){
 		if((int)namelist[index]->d_type == 4){
 			string s = namelist[index]->d_name;
-			if(s == ".." && forword_st.empty()){
-				flag = 0;
-				new_path = path;
-			}
-			else if(s == ".") new_path = path;
-			else new_path = path + '/' + s;	
+			// if(s == ".."){
+			// 	flag = 0;
+			// 	new_path = path;
+			// }
+			// else if(s == ".") new_path = path;
+			new_path = path + '/' + s;	
 			break;
 		}
 		else{
@@ -66,7 +68,7 @@ void list_print(string path,int cur_pos, int update_value){
 	    if(new_name.size() > 20)	
 	    	new_name = trim_name(namelist[i]->d_name,19,1);
 	    if(namelist[i]->d_type == 4)
-	    	cout << "\033[1;31m "<<new_name<<"\033[0m";
+	    	cout <<"\033[1;31m "<<new_name<<"\033[0m";
 	    else
 		    cout<<" "<<new_name;
 		string temp_path = new_path + "/" + namelist[i]->d_name;
@@ -75,7 +77,7 @@ void list_print(string path,int cur_pos, int update_value){
 		itemCounter++;
 	} 
 	screen_point(0,0,0);
-	pointer_move(forword_st,back_st,new_path,itemCounter);
+	return;
 }
 
 

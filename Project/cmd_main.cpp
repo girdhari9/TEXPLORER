@@ -35,8 +35,10 @@ void cmd_main(string current_path){
     while(1){    
         screen_point(cmd_mod_screen_start+3,0,0); 
         fflush(stdout);
-        fflush(stdin);
+        // fflush(stdin);
         clear_scr(cmd_mod_screen_start+3);
+        // cout<<?;
+        fflush(stdout);
         string s;
         getline(cin, s);
         tokenized(s);
@@ -123,7 +125,7 @@ void cmd_main(string current_path){
             getchar();
         }  
         else if(v[0] == "goto"){
-            string path_name = home_path + v[1];
+            string path_name = home_path + "/" + v[1];
             up = 0;
             list_print(path_name,1,0); 
         } 
