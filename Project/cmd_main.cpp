@@ -4,6 +4,7 @@
 using namespace std;
 
 vector<string> v;
+extern vector<string> search_v;
 extern string home_path;
 extern stack<string>new_back_stk;
 extern stack<string> old_back_stk;
@@ -136,10 +137,14 @@ void cmd_main(string current_path){
         else if(v[0] == "goto"){
             string path_name = home_path + "/" + v[1];
             up = 0;
-            list_print(path_name,1,0); 
+            screen_point(0,0,0);
+            list_print(path_name,1,0);
+            pointer_move();
         } 
         else if(v[0] == "search"){
+            search_v.push_back(current_path);
             search_file(current_path,v[1],0);
+            cout<<"$";
         } 
         else if(v[0] == "snapshot"){
             search_dir(current_path,v[1],v[2]);

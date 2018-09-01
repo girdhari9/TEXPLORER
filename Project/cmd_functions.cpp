@@ -4,6 +4,8 @@
 using namespace std;
 
 int flag = 0;
+vector<string> search_v;
+
 
 void copy_file(string file_name, string dir_name){
     int source_file, dest_file, read_size;
@@ -82,14 +84,17 @@ void search_file(string current_path,string file_name, int up){
     struct dirent ** dir_namelist;
     int n = scandir(current_path.c_str(),&dir_namelist,NULL, alphasort);
     while(n--){
+        if(n < 2) break;
         if(dir_namelist[n]->d_type == 4){
             current_path = current_path + "/" + dir_namelist[n]->d_name;
             search_file(current_path,file_name,0);
-            return;
         }
-        else if(dir_namelist[n]->d_name == file_name)
-            list_print(current_path,1,0);
+        else if(dir_namelist[n]->d_name == file_name){
+            search_v.push_back(current_path);
+        }
     }
+    print_search_file(search_v,file_name);
+    pointer_move();
 }
 
 void search_dir(string current_path,string folder_name,string file_name){
@@ -119,4 +124,17 @@ void snapshot(string current_path,string file_name,string folder_name){
     dest_file = open((file_store_path + "/" + file_name).c_str(), O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR);
     while((read_size = read(i_dec,buffer,sizeof(buffer))) > 0)
         write(dest_file,buffer,read_size);
+}
+
+void print_search_file(vector<string> &v,string file_name){
+    screen_point(0,0,1);
+    for(int i = 0; i < 13 && i < v.size(); i++){
+        string new_name = v[i];
+        if(file_name.size() > 20)
+            file_name = file_name.substr(1,19) + "...";
+        cout << "\033[1;31m "<<file_name<<"\033[0m";
+        screen_point(i,30,0);
+        cout<<v[i]<<"\n";
+    }
+    return;
 }
