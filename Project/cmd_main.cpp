@@ -59,7 +59,14 @@ void cmd_main(string current_path){
             for(unsigned int i = 1; i < v.size()-1; i++){
                 string dest_path, source_path; 
                 char ch = v[v.size()-1][0], ch1 = v[i][0];
-                if(ch == '~') dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i];
+                if(ch == '~') {
+                    if(ch1 == '~'){
+                        size_t found = v[i].find_last_of("/\\");
+                        dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i].substr(found+1);
+                    }
+                    else 
+                    dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i];
+                }
                 else dest_path = current_path + "/" + v[v.size()-1] + "/" + v[i];
 
                 if(ch1 == '~') source_path = home_path + "/" + v[i].substr(2);
@@ -73,7 +80,14 @@ void cmd_main(string current_path){
             for(unsigned int i = 1; i < v.size()-1; i++){
                 string dest_path, source_path; 
                 char ch = v[v.size()-1][0], ch1 = v[i][0];
-                if(ch == '~') dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i];
+                if(ch == '~') {
+                    if(ch1 == '~'){
+                        size_t found = v[i].find_last_of("/\\");
+                        dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i].substr(found+1);
+                    }
+                    else 
+                    dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i];
+                }
                 else dest_path = current_path + "/" + v[v.size()-1] + "/" + v[i];
 
                 if(ch1 == '~') source_path = home_path + "/" + v[i].substr(2);
@@ -85,10 +99,22 @@ void cmd_main(string current_path){
         }
         else if(v[0] == "copy_dir"){
             for(unsigned int i = 1; i < v.size()-1; i++){   
-                string dir_path = home_path + "/" + v[v.size()-1];
-                dir_path = dir_path + "/" + v[i];
-                mkdir(dir_path.c_str(), S_IRUSR|S_IWUSR|S_IXUSR);
-                copy_dir(home_path + "/" + v[i],dir_path);
+                string dest_path, source_path; 
+                char ch = v[v.size()-1][0], ch1 = v[i][0];
+                if(ch == '~') {
+                    if(ch1 == '~'){
+                        size_t found = v[i].find_last_of("/\\");
+                        dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i].substr(found+1);
+                    }
+                    else 
+                    dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i];
+                }
+                else dest_path = current_path + "/" + v[v.size()-1] + "/" + v[i];
+
+                if(ch1 == '~') source_path = home_path + "/" + v[i].substr(2);
+                else source_path = current_path + "/" + v[i];
+                mkdir(dest_path.c_str(), S_IRUSR|S_IWUSR|S_IXUSR);
+                copy_dir(source_path,dest_path);
             }
             cout<<"Dirctory copied successfully!\n";
             // ch = getchar();
@@ -144,7 +170,6 @@ void cmd_main(string current_path){
         else if(v[0] == "search"){
             search_v.push_back(current_path);
             search_file(current_path,v[1],0);
-            cout<<"$";
         } 
         else if(v[0] == "snapshot"){
             search_dir(current_path,v[1],v[2]);
