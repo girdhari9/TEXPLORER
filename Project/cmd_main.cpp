@@ -10,6 +10,7 @@ extern stack<string> old_back_stk;
 extern int up,cmd_mod_screen_start,horizontal;
 
 void tokenized(string s){
+    v.erase(v.begin(),v.end());
     for(unsigned int i = 0;i < s.size(); i++){
         vector<char> sub_v;
         vector<char>::iterator it;
@@ -32,18 +33,26 @@ void tokenized(string s){
 
 void cmd_main(string current_path){
     re_init_setting();
+    screen_point(cmd_mod_screen_start+3,0,0);
     while(1){    
-        screen_point(cmd_mod_screen_start+3,0,0); 
+        // clear_scr(cmd_mod_screen_start+3);
+        cout<<">";
         fflush(stdout);
-        // fflush(stdin);
-        clear_scr(cmd_mod_screen_start+3);
-        // cout<<?;
-        fflush(stdout);
+        fflush(stdin);
         string s;
         getline(cin, s);
         tokenized(s);
-        if(s == "clear"){
+        if(v[0] == "developer"){
+            cout<<"Developer: Giridhari Lal Gupta\n";
+        }
+        else if(v[0] == "quit"){
+            screen_point(0,0,0);
+            pointer_move();
+        }
+        else if(v[0] == "clear"){
             clear_scr(cmd_mod_screen_start+3);
+            screen_point(cmd_mod_screen_start+3,0,0);
+            fflush(stdout);
         }
         else if(v[0] == "copy"){
             for(unsigned int i = 1; i < v.size()-1; i++){
@@ -57,7 +66,7 @@ void cmd_main(string current_path){
                 copy_file(source_path,dest_path);
             }
             cout<<"File copied successfully!\n";
-            getchar();
+            // getchar();
         }
         else if(v[0] == "move"){
             for(unsigned int i = 1; i < v.size()-1; i++){
@@ -71,7 +80,7 @@ void cmd_main(string current_path){
                 move_file(source_path,dest_path);
             }
             cout<<"File moved successfully!\n";
-            getchar();
+            // getchar();
         }
         else if(v[0] == "copy_dir"){
             for(unsigned int i = 1; i < v.size()-1; i++){   
@@ -81,7 +90,7 @@ void cmd_main(string current_path){
                 copy_dir(home_path + "/" + v[i],dir_path);
             }
             cout<<"Dirctory copied successfully!\n";
-            getchar();
+            // ch = getchar();
         }
         else if(v[0] == "move_dir"){
             for(unsigned int i = 1; i < v.size()-1; i++){   
@@ -93,36 +102,36 @@ void cmd_main(string current_path){
                 rmdir((home_path + "/" + v[i]).c_str());
             }
             cout<<"Directory moved successfully!\n";
-            getchar();
+            // getchar();
         }
         else if(v[0] == "rename"){
             move_file(home_path + "/" + v[1],home_path + "/" + v[2]);
-            cout<<"File rename successfully!\n";
-            getchar();
+            cout<<"File rename successfully!";
+            // getchar();
         }
         else if(v[0] == "delete_file"){
             string file_path = home_path + "/" + v[1];
             remove(file_path.c_str());
             cout<<"File deleted successfully!\n";
-            getchar();
+            // getchar();
         } 
         else if(v[0] == "delete_dir"){
             delete_dir(home_path + "/" + v[1]);
             rmdir((home_path + "/" + v[1]).c_str());
             cout<<"Dirctory deleted successfully!\n";
-            getchar();
+            // getchar();
         }        
         else if(v[0] == "create_file"){
             string file_name = home_path + "/" + v[2] + "/" + v[1];
             open(file_name.c_str(), O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR);
             cout<<"file created successfully!\n";
-            getchar();
+            // getchar();
         }
         else if(v[0] == "create_dir"){
             string file_name = home_path + "/" + v[2] + "/" + v[1];
             mkdir(file_name.c_str(), S_IRUSR|S_IWUSR|S_IXUSR);
             cout<<"Directory created successfully!\n";
-            getchar();
+            // getchar();
         }  
         else if(v[0] == "goto"){
             string path_name = home_path + "/" + v[1];
@@ -137,7 +146,7 @@ void cmd_main(string current_path){
         }
         else{ 
             cout<<"command not found!\n";
-            getchar();  
+            // getchar();  
         }
     }
 }

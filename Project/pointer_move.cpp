@@ -4,6 +4,7 @@
 using namespace std;
 
 #define gotoxy(x,y) cout<<"\033["<<x<<";"<<y<<"H"
+
 string home_path = "/home/gunno/Documents/os";
 extern int up,n,x,y,screen_limit;
 struct termios initialrsettings, newrsettings;
