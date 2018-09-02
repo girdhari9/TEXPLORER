@@ -2,6 +2,7 @@
 
 using namespace std;
 int cmd_mod_screen_start,horizontal,vertical;
+int mode = 1;
 
 void screen_point(int x, int y, int flag){
 	struct winsize size;
@@ -18,7 +19,9 @@ void screen_point(int x, int y, int flag){
 	for(int i=0;i<horizontal;i++)
 		cout<<"=";
 	gotoxy(cmd_mod_screen_start+1,0);
-	cout<<"Command Mode:";
+	if(mode)
+		cout<<"Nomal Mode: ";
+	else cout<<"Command Mode:";
 	gotoxy(cmd_mod_screen_start+2,0);
 	for(int i=0;i<horizontal;i++)
 		cout<<"=";

@@ -8,35 +8,13 @@ extern vector<string> search_v;
 extern string home_path;
 extern stack<string>new_back_stk;
 extern stack<string> old_back_stk;
-extern int up,cmd_mod_screen_start,horizontal;
+extern int up,cmd_mod_screen_start,horizontal,mode;
 
 string cmd_name[16], cmd_work[16];
-
-
-
-void tokenized(string s){
-    v.erase(v.begin(),v.end());
-    for(unsigned int i = 0;i < s.size(); i++){
-        vector<char> sub_v;
-        vector<char>::iterator it;
-        while(s[i] != ' ' && i < s.size()){
-            if(s[i] == 92){ 
-                sub_v.push_back(32);
-                i += 2;
-            }
-            else{
-                sub_v.push_back(s[i]);
-                i++;
-            }
-        }
-        string t;
-        for(unsigned int j = 0; j < sub_v.size();j++)
-            t += sub_v[j];
-        v.push_back(t);
-    }
-}
+string dest_path, source_path;
 
 void cmd_main(string current_path){
+    mode = 0;
     re_init_setting();
     screen_point(cmd_mod_screen_start+3,0,0);
     cmd_arr_decl();
@@ -76,84 +54,72 @@ void cmd_main(string current_path){
             fflush(stdout);
         }
         else if(v[0] == "copy"){
+            int path = 0;
             for(unsigned int i = 1; i < v.size()-1; i++){
-                string dest_path, source_path; 
-                if(v[v.size()-1][0] == '~') {
-                    if(v[i][0] == '~'){
-                        size_t found = v[i].find_last_of("/\\");
-                        dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i].substr(found+1);
-                    }
-                    else 
-                    dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i];
-                }
-                else dest_path = current_path + "/" + v[v.size()-1] + "/" + v[i];
-
-                if(v[i][0] == '~') source_path = home_path + "/" + v[i].substr(2);
-                else source_path = current_path + "/" + v[i];
-                copy_file(source_path,dest_path);
+                path = set_path(current_path,i);
+                if(path)
+                    copy_file(source_path,dest_path);
             }
-            cout<<"File copied successfully!\n";
+            if(path){ 
+                list_print(current_path,1,0);
+                screen_point(cmd_mod_screen_start+3,0,0);
+                cout<<"File copied successfully!\n";
+            }
+            else
+                cout<<v[0]<<": command syntax is not correct 'help' - to find correct syntax.\n";
         }
         else if(v[0] == "move"){
+            int path = 0;
             for(unsigned int i = 1; i < v.size()-1; i++){
-                string dest_path, source_path; 
-                if(v[v.size()-1][0] == '~') {
-                    if(v[i][0] == '~'){
-                        size_t found = v[i].find_last_of("/\\");
-                        dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i].substr(found+1);
-                    }
-                    else 
-                    dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i];
-                }
-                else dest_path = current_path + "/" + v[v.size()-1] + "/" + v[i];
-
-                if(v[i][0] == '~') source_path = home_path + "/" + v[i].substr(2);
-                else source_path = current_path + "/" + v[i];
-                move_file(source_path,dest_path);
+                path = set_path(current_path,i);
+                if(path)
+                    move_file(source_path,dest_path);
             }
-            cout<<"File moved successfully!\n";
+            if(path){
+                list_print(current_path,1,0);
+                screen_point(cmd_mod_screen_start+3,0,0);
+                cout<<"File moved successfully!\n";
+            }
+            else
+                cout<<v[0]<<": command syntax is not correct 'help' - to find correct syntax.\n";
         }
         else if(v[0] == "copy_dir"){
+            int path = 0;
             for(unsigned int i = 1; i < v.size()-1; i++){   
-                string dest_path, source_path; 
-                if(v[v.size()-1][0] == '~') {
-                    if(v[i][0] == '~'){
-                        size_t found = v[i].find_last_of("/\\");
-                        dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i].substr(found+1);
-                    }
-                    else 
-                    dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i];
+                path = set_path(current_path,i);
+                if(path){
+                    mkdir(dest_path.c_str(), S_IRUSR|S_IWUSR|S_IXUSR);
+                    copy_dir(source_path,dest_path);
                 }
-                else dest_path = current_path + "/" + v[v.size()-1] + "/" + v[i];
-
-                if(v[i][0] == '~') source_path = home_path + "/" + v[i].substr(2);
-                else source_path = current_path + "/" + v[i];
-                mkdir(dest_path.c_str(), S_IRUSR|S_IWUSR|S_IXUSR);
-                copy_dir(source_path,dest_path);
             }
-            cout<<"Dirctory copied successfully!\n";
+            if(path){
+                list_print(current_path,1,0);
+                screen_point(cmd_mod_screen_start+3,0,0);
+                cout<<"Dirctory copied successfully!\n";
+            }
+            else
+                cout<<v[0]<<": command syntax is not correct 'help' - to find correct syntax.\n";
         }
         else if(v[0] == "move_dir"){
+            int path = 0;
             for(unsigned int i = 1; i < v.size()-1; i++){   
-                string dest_path, source_path; 
-                if(v[v.size()-1][0] == '~') {
-                    if(v[i][0] == '~'){
-                        size_t found = v[i].find_last_of("/\\");
-                        dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i].substr(found+1);
-                    }
-                    else 
-                    dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i];
+                //To set destination & source path
+                path = set_path(current_path,i); 
+                //To create directory
+                if(path){
+                    mkdir(dest_path.c_str(), S_IRUSR|S_IWUSR|S_IXUSR);
+                    copy_dir(source_path,dest_path);
+                    delete_dir(source_path);
+                    rmdir(source_path.c_str());
                 }
-                else dest_path = current_path + "/" + v[v.size()-1] + "/" + v[i];
-
-                if(v[i][0] == '~') source_path = home_path + "/" + v[i].substr(2);
-                else source_path = current_path + "/" + v[i];
-                mkdir(dest_path.c_str(), S_IRUSR|S_IWUSR|S_IXUSR);
-                copy_dir(source_path,dest_path);
-                delete_dir(source_path);
-                rmdir(source_path.c_str());
             }
-            cout<<"Directory moved successfully!\n";
+            if(path){
+                list_print(current_path,1,0);
+                screen_point(cmd_mod_screen_start+3,0,0);
+                cout<<"Directory moved successfully!\n";
+            }
+            else
+                cout<<v[0]<<": command syntax is not correct 'help' - to find correct syntax.\n";
         }
         else if(v[0] == "rename"){
             string dest_path, source_path; 
@@ -170,6 +136,8 @@ void cmd_main(string current_path){
                     source_path = current_path + "/" + v[1];
                 }
             move_file(source_path,dest_path);
+            list_print(current_path,1,0);
+            screen_point(cmd_mod_screen_start+3,0,0);
             cout<<"File rename successfully!\n";
         }
         else if(v[0] == "delete_file"){
@@ -177,6 +145,8 @@ void cmd_main(string current_path){
             if(v[1][0] == '~') file_path = home_path + "/" + v[1].substr(2);
             else file_path = current_path + "/" + v[1];
             remove(file_path.c_str());
+            list_print(current_path,1,0);
+            screen_point(cmd_mod_screen_start+3,0,0);
             cout<<"File deleted successfully!\n";
         } 
         else if(v[0] == "delete_dir"){
@@ -185,6 +155,8 @@ void cmd_main(string current_path){
             else directory_path = current_path + "/" + v[1];
             delete_dir(directory_path);
             rmdir(directory_path.c_str());
+            list_print(current_path,1,0);
+            screen_point(cmd_mod_screen_start+3,0,0);
             cout<<"Dirctory deleted successfully!\n";
         }        
         else if(v[0] == "create_file"){
@@ -192,16 +164,12 @@ void cmd_main(string current_path){
             if(v[1][0] == '~'){
                 cout<<v[0]<<": command syntax is not correct 'help' - to find correct syntax.\n";
             }
-            else if(v[2][0] == '~'){
-                file_name = home_path + "/" + v[2].substr(2) + "/" + v[1];
-                open(file_name.c_str(), O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR);
-                cout<<"file created successfully!\n";
-            }
-            else{ 
-                file_name = current_path + "/" + v[2] + "/" + v[1];
-                open(file_name.c_str(), O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR);
-                cout<<"file created successfully!\n";
-            }
+            else if(v[2][0] == '~') file_name = home_path + "/" + v[2].substr(2) + "/" + v[1];
+            else file_name = current_path + "/" + v[2] + "/" + v[1];
+            open(file_name.c_str(), O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR);
+            list_print(current_path,1,0);
+            screen_point(cmd_mod_screen_start+3,0,0);
+            cout<<"file created successfully!\n";
         }
         /*Give first agrument as directory name which wants to create
         second arguments as where wants to create. Give '.' is wants to create 
@@ -235,6 +203,7 @@ void cmd_main(string current_path){
         else if(v[0] == "search"){
             search_v.push_back(current_path);
             search_file(current_path,v[1],0);
+            pointer_move();
         } 
         else if(v[0] == "snapshot"){
             search_dir(current_path,v[1],v[2]);
@@ -279,4 +248,59 @@ void cmd_arr_decl(){
     cmd_work[13] = ": To 'CLEAR' command mode screen - 'clear'";
     cmd_work[14] = ": To 'QUIT' command mode and swtich to normal mode - 'quit'";
     cmd_work[15] = ": To know about this 'TERMINAL FILE EXPLORER' - 'about'";
+}
+
+int set_path(string current_path,int i){
+    if(v.size() < 3){
+        cout<<v[0]<<": command syntax is not correct 'help' - to find correct syntax.\n";
+        return 0;
+    }
+    if(v[v.size()-1][0] == '~') {
+        if(v[i][0] == '~'){
+            size_t found = v[i].find_last_of("/\\");
+            dest_path = home_path + "/" + v[v.size()-1].substr(2) + "/" + v[i].substr(found+1);
+        }
+        else{
+            size_t found = v[i].find_last_of("/\\");
+            if(found != string::npos)
+                dest_path = home_path + "/" + v[v.size()-1] + "/" + v[i].substr(found+1);
+            else dest_path = home_path + "/" + v[v.size()-1] + "/" + v[i];
+        }
+    }
+    else {
+        if(v[i][0] == '~'){
+            size_t found = v[i].find_last_of("/\\");
+            dest_path = current_path + "/" + v[v.size()-1] + "/" + v[i].substr(found+1);
+        }
+        size_t found = v[i].find_last_of("/\\");
+        if(found != string::npos)
+            dest_path = home_path + "/" + v[v.size()-1] + "/" + v[i].substr(found+1);
+        else dest_path = home_path + "/" + v[v.size()-1] + "/" + v[i];
+    }
+
+    if(v[i][0] == '~') source_path = home_path + "/" + v[i].substr(2);
+    else source_path = current_path + "/" + v[i];
+    return 1;
+}
+
+void tokenized(string s){
+    v.erase(v.begin(),v.end());
+    for(unsigned int i = 0;i < s.size(); i++){
+        vector<char> sub_v;
+        vector<char>::iterator it;
+        while(s[i] != ' ' && i < s.size()){
+            if(s[i] == 92){ 
+                sub_v.push_back(32);
+                i += 2;
+            }
+            else{
+                sub_v.push_back(s[i]);
+                i++;
+            }
+        }
+        string t;
+        for(unsigned int j = 0; j < sub_v.size();j++)
+            t += sub_v[j];
+        v.push_back(t);
+    }
 }

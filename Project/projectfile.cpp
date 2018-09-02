@@ -4,11 +4,11 @@
 
 using namespace std;
 
-string path = "/home/gunno/Documents/os";
+string home_path = "/home/gunno/Documents";
 	
 int main(){
 	screen_point(0,0,1);
-	list_print(path,1,0);
+	list_print(home_path,1,0);
 	pointer_move();
 	return 0;	
 }

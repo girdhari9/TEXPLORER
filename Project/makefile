@@ -5,6 +5,6 @@ OBJ =  projectfile.o screen_point.o list_print.o pointer_move.o cmd_functions.o 
 %.o: %.cpp $(DEPS)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-projectfile: $(OBJ)
+file_explorer: $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
 

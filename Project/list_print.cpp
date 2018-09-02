@@ -9,7 +9,7 @@ int itemCounter;
 string new_path;
 extern int cmd_mod_screen_start;
 extern string home_path;
-int up = 0,n,x = 1, y = 1, screen_limit;
+int up = 0,n,x = 1, y = 1, screen_limit, path_pos = 0;
 
 void list_print(string path,int cur_pos, int update_value){
 	screen_limit = cmd_mod_screen_start-1;
@@ -17,23 +17,9 @@ void list_print(string path,int cur_pos, int update_value){
 	if(cur_pos < 2){
 		screen_point(0,0,1);
 		itemCounter = 0;
-	    n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
-	    for(int i = up; i < up + screen_limit && i < n; i++){
-	    	string new_name = namelist[i]->d_name;
-	    	if(new_name.size() > 20)
-	    		new_name = trim_name(namelist[i]->d_name,19,1);
-	    	if(namelist[i]->d_type == 4)
-	    		cout << "\033[1;31m "<<new_name<<"\033[0m";
-	    	else
-		    	cout<<" "<<new_name;
-		    string temp_path = new_path + "/" + namelist[i]->d_name;
-		    screen_point(itemCounter+1,30,0);
-	        print_file_permission(temp_path);
-		    itemCounter++;
-	    }
+	    print_dir(); //To print directory attributes
 	    //To print current path location
-	    screen_point(cmd_mod_screen_start+1,20,0);
-	   	cout<<"Path: "<<new_path<<" ";
+	    
 	    if(update_value == 2)
 	    	screen_point(itemCounter,0,0);
 	    else screen_point(0,0,0);
@@ -41,9 +27,7 @@ void list_print(string path,int cur_pos, int update_value){
 	}
 	/* After pressing "Enter" this code will run to traverse in new directroy 
 	and Display all files of that directory */
-
 	screen_point(0,0,1);
-	// cout<<path.substr(18);
 	itemCounter = 0;
 	int index = up + cur_pos-1, flag = 1; 
 	while(1){
@@ -72,24 +56,8 @@ void list_print(string path,int cur_pos, int update_value){
 	}
 	if(flag)
 	forword_st.push(new_path);
-	n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
 	up = 0, x = 1;
-	for(int i = up; i < up + screen_limit && i < n; i++){
-		string new_name = namelist[i]->d_name;
-	    if(new_name.size() > 20)	
-	    	new_name = trim_name(namelist[i]->d_name,19,1);
-	    if(namelist[i]->d_type == 4)
-	    	cout <<"\033[1;31m "<<new_name<<"\033[0m";
-	    else
-		    cout<<" "<<new_name;
-		string temp_path = new_path + "/" + namelist[i]->d_name;
-		screen_point(itemCounter+1,30,0);
-	    print_file_permission(temp_path);
-		itemCounter++;
-	}
-	//To print current path location
-	screen_point(cmd_mod_screen_start+1,20,0);
-	cout<<"Path: "<<new_path<<" "; 
+	print_dir(); 	//To print directory attributes
 	screen_point(0,0,0);
 	return;
 }
@@ -135,4 +103,34 @@ string trim_name(string name,int size,int flag){
 	if(flag)	
 		t += "...";
 	return t;
+}
+
+//To print directory attributes
+void print_dir(){
+	n = scandir(new_path.c_str(),&namelist,NULL, alphasort);
+	for(int i = up; i < up + screen_limit && i < n; i++){
+		string new_name = namelist[i]->d_name;
+	    if(new_name.size() > 20)	
+	    	new_name = trim_name(namelist[i]->d_name,19,1);
+	    if(namelist[i]->d_type == 4)
+	    	cout<<"\033[21;31m "<<new_name<<"\033[0m";
+	    else if(namelist[i]->d_type == 8)
+		    cout<<"\033[21;36m "<<new_name<<"\033[0m";
+		else cout<<"\033[21;32m "<<new_name<<"\033[0m";
+		string temp_path = new_path + "/" + namelist[i]->d_name;
+		screen_point(itemCounter+1,30,0);
+	    print_file_permission(temp_path);
+		itemCounter++;
+	}
+	screen_point(cmd_mod_screen_start+1,20,0);
+	if(new_path.size() > 40){
+		size_t found = new_path.find_first_of("/\\",path_pos);
+		found = new_path.find_first_of("/\\",found+1);
+		cout <<"\033[21;32mPath:\033[0m "<<new_path.substr(found+1);
+		path_pos = found+1;
+	}
+	else {
+		path_pos = 0;
+		cout <<"\033[21;32mPath:\033[0m "<<new_path;
+	}
 }

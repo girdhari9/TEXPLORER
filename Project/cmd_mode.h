@@ -10,8 +10,8 @@
 #include <stdlib.h>
 #include<getopt.h>
 #include<fcntl.h>
-
-using namespace std;
+	
+using namespace std;	
 
 #define gotoxy(x,y) cout<<"\033["<<x<<";"<<y<<"H"
 
@@ -26,3 +26,4 @@ void tokenized(string s);
 void copy_dir(string s, string t);
 void print_search_file(vector<string> &v,string);
 void cmd_arr_decl();
+int set_path(string , int);

@@ -8,6 +8,8 @@
 #include<pwd.h>
 #include<grp.h>
 #include <sys/ioctl.h>
+#include <signal.h>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -22,3 +24,5 @@ void clear_scr(int start);
 string trim_name(string name,int size,int flag);
 void init_setting();
 void re_init_setting();
+void print_dir();
+void my_handler(int s);

@@ -5,8 +5,8 @@ using namespace std;
 
 #define gotoxy(x,y) cout<<"\033["<<x<<";"<<y<<"H"
 
-string home_path = "/home/gunno/Documents/os";
-extern int up,n,x,y,screen_limit;
+extern string home_path;
+extern int up,n,x,y,screen_limit,mode;
 struct termios initialrsettings, newrsettings;
 int c = 0;
 extern stack<string> back_st;   
@@ -14,10 +14,19 @@ extern stack<string> forword_st;
 extern int itemCounter;
 extern string new_path;
 int pointer_move(){
+    mode = 1;
     string path;
     int cur_pos;
     init_setting();
     string path1;
+
+    //To handle ctlr+c signal
+    struct sigaction sigIntHandler;
+    sigIntHandler.sa_handler = my_handler;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigIntHandler.sa_flags = 0;
+    sigaction(SIGINT, &sigIntHandler, NULL);
+
     while(c != 101){
         fflush(stdin);
         fflush(stdout);
@@ -82,4 +91,10 @@ void init_setting(){
 
 void re_init_setting(){
     tcsetattr(0, TCSANOW, &initialrsettings);
+}
+
+void my_handler(int s){
+    clear_scr(1);
+    re_init_setting();
+    exit(1); 
 }

@@ -6,7 +6,6 @@ using namespace std;
 int flag = 0;
 vector<string> search_v;
 
-
 void copy_file(string file_name, string dir_name){
     int source_file, dest_file, read_size;
     char buffer[1024];
@@ -94,7 +93,6 @@ void search_file(string current_path,string file_name, int up){
         }
     }
     print_search_file(search_v,file_name);
-    pointer_move();
 }
 
 void search_dir(string current_path,string folder_name,string file_name){
@@ -132,7 +130,7 @@ void print_search_file(vector<string> &v,string file_name){
         string new_name = v[i];
         if(file_name.size() > 20)
             file_name = file_name.substr(1,19) + "...";
-        cout << "\033[1;31m "<<file_name<<"\033[0m";
+        cout<<"\033[21;35m "<<file_name<<"\033[0m";
         screen_point(i,30,0);
         cout<<v[i]<<"\n";
     }
