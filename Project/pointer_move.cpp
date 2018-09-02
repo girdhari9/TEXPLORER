@@ -33,6 +33,7 @@ int pointer_move(){
                                 up++; list_print(path,1,2);
                           } break;
     		    case 'C':{ up = 0, x = 1;
+                        fflush(stdout); fflush(stdin);
                         if(!forword_st.empty()){
                             path1 = forword_st.top();
                             back_st.push(path1);

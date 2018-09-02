@@ -203,9 +203,9 @@ void cmd_main(string current_path){
                 cout<<"file created successfully!\n";
             }
         }
-        // Give first agrument as directory name which wants to create
-        // second arguments as where wants to create. Give '.' is wants to create 
-        // directory in current directory.
+        /*Give first agrument as directory name which wants to create
+        second arguments as where wants to create. Give '.' is wants to create 
+        directory in current directory.*/
         else if(v[0] == "create_dir"){
             string file_name;
             if(v[1][0] == '~'){

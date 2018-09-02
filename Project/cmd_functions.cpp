@@ -128,7 +128,7 @@ void snapshot(string current_path,string file_name,string folder_name){
 
 void print_search_file(vector<string> &v,string file_name){
     screen_point(0,0,1);
-    for(int i = 0; i < 13 && i < v.size(); i++){
+    for(unsigned int i = 0; i < 13 && i < v.size(); i++){
         string new_name = v[i];
         if(file_name.size() > 20)
             file_name = file_name.substr(1,19) + "...";

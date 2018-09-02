@@ -8,6 +8,7 @@ stack<string> forword_st;
 int itemCounter;
 string new_path;
 extern int cmd_mod_screen_start;
+extern string home_path;
 int up = 0,n,x = 1, y = 1, screen_limit = 13;
 
 void list_print(string path,int cur_pos, int update_value){
@@ -29,9 +30,11 @@ void list_print(string path,int cur_pos, int update_value){
 	        print_file_permission(temp_path);
 		    itemCounter++;
 	    }
+	    //To print current path location
+	    screen_point(cmd_mod_screen_start+1,20,0);
+	   	cout<<"Path: "<<new_path<<" ";
 	    if(update_value == 2)
 	    	screen_point(itemCounter,0,0);
-	    // if(update_value == 4) return;
 	    else screen_point(0,0,0);
 	    return;
 	}
@@ -45,12 +48,19 @@ void list_print(string path,int cur_pos, int update_value){
 	while(1){
 		if((int)namelist[index]->d_type == 4){
 			string s = namelist[index]->d_name;
-			// if(s == ".."){
-			// 	flag = 0;
-			// 	new_path = path;
-			// }
-			// else if(s == ".") new_path = path;
-			new_path = path + '/' + s;	
+			if(s == ".." && new_path == home_path){
+				flag = 0;
+				new_path = path;
+			}
+			else if(s == ".."){
+				size_t found = new_path.find_last_of("/\\");
+				new_path = new_path.substr(0,found);
+			}
+			else if(s == "."){ 
+				new_path = path;
+				flag = 0;
+			}
+			else new_path = path + '/' + s;	
 			break;
 		}
 		else{
@@ -75,7 +85,10 @@ void list_print(string path,int cur_pos, int update_value){
 		screen_point(itemCounter+1,30,0);
 	    print_file_permission(temp_path);
 		itemCounter++;
-	} 
+	}
+	//To print current path location
+	screen_point(cmd_mod_screen_start+1,20,0);
+	cout<<"Path: "<<new_path<<" "; 
 	screen_point(0,0,0);
 	return;
 }
