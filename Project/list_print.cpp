@@ -9,9 +9,10 @@ int itemCounter;
 string new_path;
 extern int cmd_mod_screen_start;
 extern string home_path;
-int up = 0,n,x = 1, y = 1, screen_limit = 13;
+int up = 0,n,x = 1, y = 1, screen_limit;
 
 void list_print(string path,int cur_pos, int update_value){
+	screen_limit = cmd_mod_screen_start-1;
 	new_path = path;
 	if(cur_pos < 2){
 		screen_point(0,0,1);
