@@ -246,7 +246,14 @@ void cmd_main(string current_path){
             }
         } 
         else if(v[0] == "snapshot"){
-            search_dir(current_path,v[1],v[2]);
+            string path_name;
+            if(v[1][0] == '~')
+                path_name = home_path + v[1].substr(1);
+            else path_name = current_path + "/" + v[1];
+            FILE *file_pointer = fopen(v[2].c_str(),"w+");
+            snapshot(path_name,file_pointer);
+            fclose(file_pointer);
+            cout<<"Snapshot Done! "<<v[2]<< " created in current Directory.\n";
         }
         else{   
             cout<<v[0]<<": command not found 'help' - to find correct command name.\n";

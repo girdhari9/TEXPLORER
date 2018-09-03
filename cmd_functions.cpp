@@ -5,6 +5,7 @@ using namespace std;
 
 int flag = 0;
 vector<string> search_v;
+vector<string> snap_v;
 
 void copy_file(string file_name, string dir_name){
     int source_file, dest_file, read_size;
@@ -94,34 +95,23 @@ void search_file(string current_path,string file_name){
     }
 }
 
-void search_dir(string current_path,string folder_name,string file_name){
+void snapshot(string current_path,FILE *file_pointer){
     struct dirent ** dir_namelist;
     int n = scandir(current_path.c_str(),&dir_namelist,NULL, alphasort);
-    string new_current_path;
+    int x = n;
+    fprintf(file_pointer,"%s\n\n",current_path.c_str());
     while(n--){
-        if(dir_namelist[n]->d_type == 4 && dir_namelist[n]->d_name != folder_name){
-            new_current_path = current_path + "/" + dir_namelist[n]->d_name;
-            snapshot(current_path,file_name,folder_name);
-            return;
-        }
-        else if(dir_namelist[n]->d_type == 4){
-            new_current_path = current_path + "/" + dir_namelist[n]->d_name;
-            open((current_path + "/" + file_name).c_str(), O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR);
-            snapshot(current_path,file_name,folder_name);
+        if(n<2) break;
+        fprintf(file_pointer,"%s\t",dir_namelist[n]->d_name);
+    }
+    fprintf(file_pointer,"\n\n\n");
+    while(x--){
+        if(x<2) break;
+        else if(dir_namelist[x]->d_type == 4){
+            string new_current_path = current_path + "/" + dir_namelist[x]->d_name;
+            snapshot(new_current_path,file_pointer);
         }
     }
-}
-
-void snapshot(string current_path,string file_name,string folder_name){
-    string file_store_path = current_path;
-    string write_name = folder_name + ":";
-    int dest_file, read_size;
-    char buffer[1024];
-    string::size_type sz; 
-    int i_dec = std::stoi (write_name,&sz);
-    dest_file = open((file_store_path + "/" + file_name).c_str(), O_WRONLY|O_CREAT, S_IRUSR|S_IWUSR);
-    while((read_size = read(i_dec,buffer,sizeof(buffer))) > 0)
-        write(dest_file,buffer,read_size);
 }
 
 void print_search_file(vector<string> &v,string file_name){

@@ -20,7 +20,7 @@ void copy_file(string s, string t);
 void move_file(string s, string t);
 void delete_dir(string t);
 void search_file(string s, string t);
-void search_dir(string t,string s,string file);
+void snapshot(string t,FILE* file);
 void snapshot(string path,string file,string folder);
 void tokenized(string s);
 void copy_dir(string s, string t);

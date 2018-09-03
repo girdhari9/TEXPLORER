@@ -28,7 +28,7 @@ int pointer_move(){
     sigIntHandler.sa_flags = 0;
     sigaction(SIGINT, &sigIntHandler, NULL);
 
-    while(c != 101){
+    while(c != 'q'){
         fflush(stdin);
         fflush(stdout);
         path = new_path;
@@ -78,6 +78,7 @@ int pointer_move(){
     	    }
     }
     re_init_setting();
+    my_handler(1);
     exit(0);
 }
 
@@ -103,5 +104,5 @@ void my_handler(int s){
         unlink(file_path.c_str());
     }
     trace_map.erase(trace_map.begin(),trace_map.end());
-    exit(1); 
+    exit(0); 
 }
