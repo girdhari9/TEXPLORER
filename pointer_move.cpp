@@ -59,18 +59,18 @@ int pointer_move(){
                         break;
                     }
                 case 10:{
-                    // if(!forword_st.empty() && x < 3){
                         back_st.push(path);
                         list_print(path,x,0);  
-                    // } 
                     break;
                 } 
-                case 127: up = 0, x = 1;
-                        if(!back_st.empty()){
-                            path1 = back_st.top();
-                            forword_st.push(path1);
-                            back_st.pop(); list_print(path1,1,0); break;
-                        }
+                case 127:{ up = 0, x = 1;
+                        if(new_path != home_path){
+                        size_t found = new_path.find_last_of("/\\");
+                        path1 = new_path.substr(0,found);
+                        forword_st.push(path1);
+                        back_st.pop(); list_print(path1,1,0); break;
+                    }
+                }
                 case 104: up = 0, x = 1;
                         list_print(home_path,1,0); break;
                 case 58:  cmd_main(path); break;

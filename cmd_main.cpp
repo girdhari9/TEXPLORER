@@ -166,7 +166,7 @@ void cmd_main(string current_path){
             else{
                 size_t found = copy_file_path.find_last_of("/\\");
                 trace_map[copy_file_path.substr(found+1)] = file_path;
-                move_file(file_path,copy_file_path);
+                rename(file_path.c_str(),copy_file_path.c_str());
                 list_print(current_path,1,0);
                 screen_point(cmd_mod_screen_start+3,0,0);
                 cout<<"Moved to trace!\n";
@@ -276,8 +276,8 @@ void cmd_arr_decl(){
     cmd_work[1] = ": To 'MOVE' files only.\n syntax: 'move' <SOURCE PATH 1> ... <SOURCE PATH n> <DEST PATH>";
     cmd_work[2] = ": To 'COPY DIRECTORIES'.\n syntax: 'copy_dir' <SOURCE PATH 1> ... <SOURCE PATH n> <DEST PATH>";
     cmd_work[3] = ": To 'MOVE DIRECTORIES'.\n syntax: 'move_dir' <SOURCE PATH 1> ... <SOURCE PATH n> <DEST PATH>";
-    cmd_work[4] = ": To 'DELETE FILES'.\n syntax: 'move_dir' <SOURCE PATH 1> ... <SOURCE PATH n> <DEST PATH>";
-    cmd_work[5] = ": To 'DELETE DIRECTORIES'.\n syntax: 'move_dir' <SOURCE PATH 1> ... <SOURCE PATH n> <DEST PATH>";
+    cmd_work[4] = ": To 'DELETE FILES'.\n syntax: 'move_dir' <SOURCE PATH 1> ... <SOURCE PATH n>";
+    cmd_work[5] = ": To 'DELETE DIRECTORIES'.\n syntax: 'move_dir' <SOURCE PATH 1> ... <SOURCE PATH n>";
     cmd_work[6] = ": To 'CREATE FILE'.\n syntax: 'create_file' <SOURCE PATH> <DEST PATH>";
     cmd_work[7] = ": To 'CREATE DIRECTORY'.\n syntax: 'create_dir' <SOURCE PATH> <DEST PATH>";
     cmd_work[8] = ": To 'REACH DIRECTORY'.\n syntax: 'goto' <DIRECTORY NAME>/<DIRECTORY PATH>";
@@ -348,7 +348,7 @@ void tokenized(string s){
 void cmd_pointer_move(string current_path, string file_name){
     init_setting();
     char c = 0;
-    int x = 0,y = 1, cur_pos = search_v.size()-1;
+    int x = search_v.size()-1,y = 1, cur_pos = search_v.size()-1;
     while(c != 101){
         fflush(stdin);
         fflush(stdout);
