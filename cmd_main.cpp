@@ -1,3 +1,4 @@
+/* Name: Giridhari Lal Gupta 2018201019 OS1 */
 #include "cmd_mode.h"
 #include "normal_mode.h"
 
@@ -9,7 +10,7 @@ extern vector<string> search_v;
 extern string home_path;
 extern stack<string>new_back_stk;
 extern stack<string> old_back_stk;
-extern int up,cmd_mod_screen_start,horizontal,mode,screen_limit;
+extern int up, cmd_mod_screen_start, horizontal, mode, screen_limit;
 
 string cmd_name[16], cmd_work[16];
 string dest_path, source_path;
@@ -28,9 +29,7 @@ void cmd_main(string current_path){
         getline(cin, s);
         tokenized(s);
         if(v[0] == "help"){
-            clear_scr(cmd_mod_screen_start+3);
-            screen_point(cmd_mod_screen_start+3,0,0);
-            fflush(stdout);
+            clear_cmd_scr();
             cout<<"You can perform operation using following commands:\n";
             cout<<"\nAll commands are case sensitive.\n";
             for(int i=0;i<=15;i++){
@@ -43,18 +42,21 @@ void cmd_main(string current_path){
             screen_point(cmd_mod_screen_start+3,0,0);
         }
         else if(v[0] == "about"){
+            cout<<"TEXPLORER: Developed in 2018.\n";
             cout<<"Developer: Giridhari Lal Gupta\n";
             cout<<"Student @ IIITH : 2018201019\n";
         }
         else if(v[0] == "quit"){
+            list_print(current_path,1,0);
+            clear_scr(cmd_mod_screen_start+3);
+            mode = 1;
             screen_point(0,0,0);
+            fflush(stdout);
             pointer_move();
         }
         else if(v[0] == "clear"){
             list_print(current_path,1,0);
-            clear_scr(cmd_mod_screen_start+3);
-            screen_point(cmd_mod_screen_start+3,0,0);
-            fflush(stdout);
+            clear_cmd_scr();
         }
         else if(v[0] == "copy"){
             int path = 0;
@@ -241,7 +243,7 @@ void cmd_main(string current_path){
                 cmd_pointer_move(current_path,v[1]);
             }
             else{
-                screen_point(cmd_mod_screen_start+3,0,0);
+                clear_cmd_scr();
                 cout<<"No result found!\n";
             }
         } 
@@ -387,4 +389,10 @@ void cmd_pointer_move(string current_path, string file_name){
                 default: break;
             }
     }
+}
+
+void clear_cmd_scr(){
+    clear_scr(cmd_mod_screen_start+3);
+    screen_point(cmd_mod_screen_start+3,0,0);
+    fflush(stdout);
 }

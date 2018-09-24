@@ -1,3 +1,4 @@
+/* Name: Giridhari Lal Gupta 2018201019 OS1 */
 #include<bits/stdc++.h>
 #include<dirent.h>
 #include <termios.h>
@@ -28,3 +29,4 @@ void print_search_file(vector<string> &v,string);
 void cmd_arr_decl();
 int set_path(string , int);
 void cmd_pointer_move(string,string);
+void clear_cmd_scr();

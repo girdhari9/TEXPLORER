@@ -1,3 +1,4 @@
+/* Name: Giridhari Lal Gupta 2018201019 OS1 */
 #include "normal_mode.h"
 
 using namespace std;
@@ -125,7 +126,8 @@ void print_dir(){
 		itemCounter++;
 	}
 	screen_point(cmd_mod_screen_start+1,20,0);
-	if(new_path.size() > horizontal-10)
+	unsigned int loc = horizontal-10;
+	if(new_path.size() > loc)
 		cout <<"\033[21;32mPath:\033[0m./:"<<new_path.substr(home_path.size(),horizontal-10)<<"...";
 	else cout <<"\033[21;32mPath:\033[0m./:"<<new_path.substr(home_path.size());
 }

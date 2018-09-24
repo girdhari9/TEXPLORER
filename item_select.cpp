@@ -1,3 +1,4 @@
+/* Name: Giridhari Lal Gupta 2018201019 OS1 */
 #include "normal_mode.h"
 #include <termios.h>
 using namespace std;

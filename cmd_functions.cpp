@@ -1,3 +1,4 @@
+/* Name: Giridhari Lal Gupta 2018201019 OS1 */
 #include "cmd_mode.h"
 #include "normal_mode.h"
 
